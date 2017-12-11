@@ -38,6 +38,13 @@ func (self *PhantomProcessor) Run() {
 		switch plugin := request.PluginName; plugin {
 		case "screenshot":
 			// process screenshot here
+			target := request.Arguments[0]
+			fmt.Printf("opening page for %s\n", target)
+
+			if err := page.Open(target); err != nil {
+				panic(err)
+			}
+
 			response, err := takeScreenShot(request, page)
 			if err != nil {
 				panic(err)

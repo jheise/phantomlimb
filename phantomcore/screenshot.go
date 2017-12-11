@@ -23,15 +23,21 @@ func takeScreenShot(request *phantommsg.PhantomRequest, page *phantomjs.WebPage)
 
 	target := request.Arguments[0]
 
-	if err := page.Open(target); err != nil {
-		fmt.Println("Screenshot: failed to open page")
+	// if err := page.Open(target); err != nil {
+	// 	fmt.Println("Screenshot: failed to open page")
+	// 	response.ResponseCode = 500
+	// 	response.Data = ""
+	// 	return response, err
+	// }
+
+	if err := page.SetViewportSize(1024, 800); err != nil {
+		fmt.Println("Screenshot: failed to viewport")
 		response.ResponseCode = 500
 		response.Data = ""
 		return response, err
 	}
 
-	if err := page.SetViewportSize(1024, 800); err != nil {
-		fmt.Println("Screenshot: failed to viewport")
+	if err := page.Render(fmt.Sprintf("%s.png", target), "png", 100); err != nil {
 		response.ResponseCode = 500
 		response.Data = ""
 		return response, err
