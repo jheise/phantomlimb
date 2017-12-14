@@ -2,6 +2,7 @@ package main
 
 import (
 	// standard
+	b64 "encoding/base64"
 	"fmt"
 	"net/http"
 
@@ -14,7 +15,13 @@ import (
 
 func ScreenShotHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	website := vars["website"]
+	b64web := vars["website"]
+	bwebsite, err := b64.StdEncoding.DecodeString(b64web)
+	if err != nil {
+		fmt.Fprintf(w, "%v", err)
+		return
+	}
+	website := string(bwebsite)
 	info.Printf("Screenshot request for %s\n", website)
 
 	shotrequest := phantommsg.NewPhantomRequest("screenshot",[]string{website})
